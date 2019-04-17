@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -96,10 +97,26 @@ public class epic {
 				if(ages.equals("Ages 13 - 99") && typePass.equals("Adult Epic 7 Day Pass ")) {
 					Select numPass = new Select(results.get(i).findElement(By.tagName("select")));
 					numPass.selectByIndex(numberofTickets);
-					float[] prices = {};
-					prices[0] = Float.valueOf(results.get(i).findElement(By.cssSelector(".price-sml")).getAttribute("innerText").replace("$", "").replace("/ person", ""));
-					prices[1] = Float.valueOf(results.get(i).findElement(By.cssSelector(".money")).getAttribute("innerText").replace("$", "").replace("/ person", ""));
-					return prices;
+					float[] prices = new float[2];
+					boolean aux = false;
+					try {
+						results.get(i).findElement(By.cssSelector(".price-sml"));
+						aux = true;
+					} catch (NoSuchElementException e) {
+						aux = false;
+					}
+					if (aux) {
+						prices[0] = Float.valueOf(results.get(i).findElement(By.cssSelector(".price-sml")).getAttribute("innerText").replace("$", "").replace("/ person", "").replace(",", ""));
+						prices[1] = Float.valueOf(results.get(i).findElement(By.cssSelector(".money")).getAttribute("innerText").replace("$", "").replace("/ person", "").replace(",", ""));
+						return prices;
+					} else {
+						clickEpic();
+						clickBuyNow();
+						numPass.selectByIndex(numberofTickets);
+						prices[0] = Float.valueOf(results.get(i).findElement(By.cssSelector(".price-sml")).getAttribute("innerText").replace("$", "").replace("/ person", "").replace(",", ""));
+						prices[1] = Float.valueOf(results.get(i).findElement(By.cssSelector(".money")).getAttribute("innerText").replace("$", "").replace("/ person", "").replace(",", ""));
+						return prices;
+					}	
 				}
 				break;
 			}
@@ -107,7 +124,8 @@ public class epic {
 		return null;
 	}
 	
-	public float [] AddChildPass(int numberofTickets){
+	public float [] AddChildPass(int numberofTickets) throws InterruptedException{
+		Thread.sleep(5000);
 		for (int i = 0; i < results.size(); i++) {
 			if (results.get(i).isDisplayed()) {
 				String ages = results.get(i).findElement(By.tagName("small")).getAttribute("innerText");
@@ -115,19 +133,35 @@ public class epic {
 				if(ages.equals("Ages 5 - 12") && typePass.equals("Child Epic 7 Day Pass ")) {
 					Select numPass = new Select(results.get(i).findElement(By.tagName("select")));
 					numPass.selectByIndex(numberofTickets);
-					float[] prices = {};
-					prices[0] = Float.valueOf(results.get(i).findElement(By.cssSelector(".price-sml")).getAttribute("innerText").replace("$", "").replace("/ person", ""));
-					prices[1] = Float.valueOf(results.get(i).findElement(By.cssSelector(".money")).getAttribute("innerText").replace("$", "").replace("/ person", ""));
-					return prices;
+					float[] prices = new float[2];
+					boolean aux = false;
+					try {
+						results.get(i).findElement(By.cssSelector(".price-sml"));
+						aux = true;
+					} catch (NoSuchElementException e) {
+						aux = false;
+					}
+					if (aux) {
+						prices[0] = Float.valueOf(results.get(i).findElement(By.cssSelector(".price-sml")).getAttribute("innerText").replace("$", "").replace("/ person", "").replace(",", ""));
+						prices[1] = Float.valueOf(results.get(i).findElement(By.cssSelector(".money")).getAttribute("innerText").replace("$", "").replace("/ person", "").replace(",", ""));
+						return prices;
+					} else {
+						clickEpic();
+						clickBuyNow();
+						numPass.selectByIndex(numberofTickets);
+						prices[0] = Float.valueOf(results.get(i).findElement(By.cssSelector(".price-sml")).getAttribute("innerText").replace("$", "").replace("/ person", "").replace(",", ""));
+						prices[1] = Float.valueOf(results.get(i).findElement(By.cssSelector(".money")).getAttribute("innerText").replace("$", "").replace("/ person", "").replace(",", ""));
+						return prices;
+					}	
 				}
 				break;
 			}
-			
 		}
 		return null;
 	}
 	
 	public void clickLetBookIt() {
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		LetsBookIt.click();
 	}
 	

@@ -1,11 +1,9 @@
 package Tests;
 
 import java.net.MalformedURLException;
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -29,10 +27,10 @@ public class epicTest {
     	homeURL = driver.getCurrentUrl();
     }
     
-    @AfterTest
-    public void after() {
-    	driver.close();
-    }
+//    @AfterTest
+//    public void after() {
+//    	driver.close();
+//    }
     
     @Test (priority = 0, description = "Verify that clicking epic image on PopUp from main page it goes to Epic page")
 	public void ikonPage() {
@@ -45,7 +43,6 @@ public class epicTest {
 	public void ikonPasses()  {
     	epic ePage = new epic(driver);
     	ePage.clickBuyNow();
-    	ePage.waitForLoad(driver);
     	Assert.assertEquals(driver.getCurrentUrl(), "https://epic.events.ski.com/epic-passes");
 	}
     
@@ -58,15 +55,8 @@ public class epicTest {
 	}
     
     
-    @Test (priority = 3, description = "Verify user is able to add pass for Child, and verify prices")
-	public void ikonChildPasses() throws InterruptedException  {
-    	int numChild = 2;
-    	epic ePage = new epic(driver);
-    	float [] prices = ePage.AddChildPass(numChild);
-    	Assert.assertEquals(prices[1], prices[0]*numChild);
-	}
     
-    @Test (priority = 4, description = "Verify that ckicking on 'Lets Book It' travelers information page should be displayed")
+    @Test (priority = 3, description = "Verify that ckicking on 'Lets Book It' travelers information page should be displayed")
 	public void clickLetBook() throws InterruptedException   {
     	epic ePage = new epic(driver);
     	String price = ePage.getPrice();
@@ -75,8 +65,8 @@ public class epicTest {
     	Assert.assertEquals(price, tPage.getPrice());
     	Assert.assertEquals(driver.getCurrentUrl(), "https://epic.events.ski.com/travelers");
 	}
-    
-    @Test (priority = 5, description = "Fill travelers information and click 'Continue'")
+
+  @Test (priority = 5, description = "Fill travelers information and click 'Continue'")
 	public void setTravelers() throws InterruptedException   {
     	travelers tPage = new travelers(driver);
     	String [] names = {"Marco",  "Pablo", "Jocelyn", "Victor"};
